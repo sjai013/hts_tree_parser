@@ -44,4 +44,5 @@ def DrawTree(questions, pdfTree,  saveAs):
         
     
     graph.write_png(saveAs)
+    print "File written to " + saveAs
     

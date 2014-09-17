@@ -1,14 +1,26 @@
 from tree_parse import *
 from tree_draw import *
+import sys
 
+# Print help message if not enough input parameters
+if (len(sys.argv)) != 5:
+    print "USAGE: main.py [INF FILE] [LEAF PREFIX] [STATE] [OUTPUT IMAGE]"
+    print "\t\t [INF FILE] is the path to the input .inf question file."
+    print "\t\t [LEAF PREFIX] is a prefix specific to the pdf type. E.g. mgc, lf0, str."
+    print "\t\t [STATE] is the state for which to draw the output graphic for."
+    print "\t\t [OUTPUT IMAGE] is the path of the output tree diagram"
+    sys.exit()
+    
 # Load a hts question file (.inf)
-filename = "tree-mgc.inf"
+inputFile = sys.argv[1]
 # Look for "mgc" in leaf nodes - this should be modified based on which tree is being analysed
-leafPrefix = "mgc"
+leafPrefix = sys.argv[2]
 # State for which to draw diagram
-state = 2
+state = int(sys.argv[3])
+#Image path
+outputGraphic = sys.argv[4]
 
-data = LoadTree(filename)
+data = LoadTree(inputFile)
 
 matches = GetAllLeafNodes(leafPrefix,data)
 
@@ -20,5 +32,4 @@ for i in range(len(state_matches.keys())):
     pdfTrees[pdfName] = GetQSListForPDF(pdfName,  state,  matches,  data)
     
 
-DrawTree(state_data, pdfTrees, '/home/sahil/Desktop/graph.png')
-print "COMPLETE\n"
+DrawTree(state_data, pdfTrees, outputGraphic)
