@@ -14,11 +14,11 @@ def DrawTree(questions, pdfTree,  saveAs):
     for i in range(len(questions)):
         nodeName = "qs%d" %i
         nodeLabel = "%s=%s" %(questions[i][0],  questions[i][1])
-        graph.add_node(pydot.Node(nodeName, label=nodeLabel))
+        graph.add_node(pydot.Node(nodeName, label=nodeLabel,style="filled", fillcolor="#ffaaaa"))
     
     # Add all pdfs as nodes
     for pdfName in pdfTree.keys():
-        graph.add_node(pydot.Node(pdfName, label=pdfName))
+        graph.add_node(pydot.Node(pdfName, label=pdfName,  style="filled",  fillcolor="#aaffaa"))
     
     # Draw edges (could merge this with above loop, but code is more readable this way)
     for pdfName in pdfTree.keys():
