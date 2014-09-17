@@ -16,7 +16,7 @@ import sys
 #               [NEXT QS IF FALSE] (or [MGC OUT] if leaf node)
 #               [NEXT QS IF TRUE] (or [MGC OUT] if leaf node)
 ###
-def LoadTree(file):
+def LoadTree(file,  trickyPhonesFile):
     f = open(file)
     raw = f.read()
     f.close()
@@ -46,9 +46,24 @@ def LoadTree(file):
      # Two empty arrays added to start of array, because technically, the first state is state 2
     data.insert(0, [])
     data.insert(0, [])
+    trickyPhones = GetTrickyPhones(trickyPhonesFile)
+    for i in range(2, len(data)):
+        for j in range(len(data[i])):
+            if "phone" in data[i][j][0]:
+                if trickyPhones.has_key(data[i][j][1]):
+                    data[i][j][1] = trickyPhones[data[i][j][1]]
     return data
 
 
+def GetTrickyPhones(trickyPhonesFile):
+    f = open(trickyPhonesFile)
+    trickyPhones = f.read().split("\n")
+    trickyPhonesDict = dict()
+    for i in range(1, len(trickyPhones)-1):
+        temp = trickyPhones[i].split()
+        trickyPhonesDict[temp[1]] = temp[0]
+    
+    return trickyPhonesDict
 ###
 # GetAllNeafNodes(partial_string, data)
 # This function parses the output data from LoadTree tree file, and returns a list of all leaf nodes which match the partial_string (i.e. "mgc")
