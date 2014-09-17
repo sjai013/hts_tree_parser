@@ -3,15 +3,15 @@ from tree_draw import *
 
 # Load a hts question file (.inf)
 filename = "tree-mgc.inf"
-
 # Look for "mgc" in leaf nodes - this should be modified based on which tree is being analysed
 leafPrefix = "mgc"
+# State for which to draw diagram
+state = 2
 
 data = LoadTree(filename)
 
 matches = GetAllLeafNodes(leafPrefix,data)
 
-state = 2
 state_data = data[state]
 state_matches = matches[state]
 pdfTrees = dict()
