@@ -63,8 +63,9 @@ class QSTreeDiagram:
             self.pdfTrees[0] = []
             self.pdfTrees[1] = []
             
-            sys.stdout.write("Loading feature tree for state: " + str(this_state) + ' ...\n')
             numPDFs = len(state_leafNodes.keys())
+            sys.stdout.write("Loading feature tree (%d leaves) for state: " %(numPDFs) + str(this_state) + ' ..\n' )
+            
             pdfsComplete = 0
             percentComplete = pdfsComplete/numPDFs
             self.__DrawProgress(pdfsComplete)
@@ -75,15 +76,14 @@ class QSTreeDiagram:
                 percentComplete = float(pdfsComplete)/numPDFs*100
                 self.__DrawProgress(percentComplete)                
             
-            
             self.pdfTrees[i] = state_pdfTree
             print ''
    
 
-    ''' DrawTree(self, state,  saveAsPath="./image.png"):
+    ''' DrawTree(self, state,  saveAsPath="./image.[format]"):
         Draw tree diagram for a particular state, and save resultant image at some location
     '''
-    def DrawTree(self, state,  saveAsPath="./image.png"):
+    def DrawTree(self, state,  saveAsPath,  format):
         graph = pydot.Dot(graph_type='graph')
         questions = self.treeData[state]
         pdfTree = self.pdfTrees[state]
@@ -97,7 +97,7 @@ class QSTreeDiagram:
         # Add all pdfs as nodes
         for pdfName in pdfTree.keys():
             graph.add_node(pydot.Node(pdfName, label=pdfName,  style="filled",  fillcolor="#aaffaa"))
-
+            
         # Draw edges (could merge this with above loop, but code is more readable this way)
         for pdfName in pdfTree.keys():
             for i in range(len(pdfTree[pdfName])-1):
@@ -106,6 +106,11 @@ class QSTreeDiagram:
                 node_next = "qs%d" %pdfTree[pdfName][i+1][0][0]
                 qsAnswer = "{}".format(pdfTree[pdfName][i][1])
                 edge_key = (node_this, node_next)
+                
+                # need to make sure both nodes exist, otherwise we don't draw anything
+                if node_this not in graph.obj_dict['nodes'].keys() or node_next not in graph.obj_dict['nodes'].keys():
+                    continue
+                    
                 # need to make sure edges doesn't exist, otherwise pydot draws multiple lines which look horrible
                 if edge_key not in graph.obj_dict['edges'].keys():
                     edge = pydot.Edge(node_this,  node_next,  label=qsAnswer)
@@ -121,7 +126,7 @@ class QSTreeDiagram:
             graph.add_edge(edge)
 
         print 'Saving tree diagram to ' + saveAsPath
-        graph.write_png(saveAsPath)
+        graph.write(saveAsPath,  format=format)
         print "File written to " + saveAsPath
 
     ''' __LoadTree(file)
@@ -181,6 +186,7 @@ class QSTreeDiagram:
         trickyPhones = dict()
         for i in range(1, len(_trickyPhones)-1):
             temp = _trickyPhones[i].split()
+            temp[0] = temp[0].replace("\\",  "")
             trickyPhones[temp[1]] = temp[0]
         self.trickyPhones = trickyPhones
         sys.stdout.write ("done\n")
@@ -253,6 +259,8 @@ class QSTreeDiagram:
                         decision = True
 
                     return [i, decision]
+        
+        return [-1, False]
 
     ''' __GetQSNumbers(qsNumber, state_treeData)
     # This function recursively gets a list of the questions which lead to the initial input question (incuding the decisions requried at each node to reach node).
@@ -262,13 +270,18 @@ class QSTreeDiagram:
     #           [GetQSParent]
     '''
     def __GetQSNumbers(self, qsNumber,  state_treeData):
+        
         parentNode = self.__GetQSParent(qsNumber,  state_treeData)
         parentQS = parentNode[0]
+
+        
         if parentQS == 0:
             return [parentNode]
 
-        if parentQS == -1:
-            return [-1, False]
+        # The first question magically happens to define a leaf node.  This is not as magical as you might think, because I've seen it happen once.  
+        # Although you might think it's not magical at all, in which case its slightly more magical than you think
+        elif parentQS == -1:
+            return [[-1, False]]
 
         qsList = self.__GetQSNumbers(parentQS, state_treeData);
         qsList.append(parentNode)

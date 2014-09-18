@@ -29,7 +29,7 @@ states = map(int, sys.argv[4].split())
 featFile = sys.argv[5]
 
 
-tree = QSTreeDiagram(inputFile,trickyPhones,leafPrefix,  createTree=False)
+tree = QSTreeDiagram(inputFile,trickyPhones,leafPrefix,  createTree=False,  state=states)
 params = HMMFeatureParameters(tree, leafPrefix, states,  featFile)
 
 pdfs = params.GetParameters()

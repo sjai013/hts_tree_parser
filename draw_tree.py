@@ -14,20 +14,28 @@ if (len(sys.argv)) != 6:
     print "\t\t\t(actual name will be appended by '_[STATE].png'"
     print "EXAMPLE: draw_tree.py 'tree-mgc.inf' 'trickyPhones.txt' 'mgc' '2 3 5' './tree_mgc'"
     sys.exit()
+else:
+    # Load hts question file (.inf)
+    inputFile = sys.argv[1]
+    #Tricky phones
+    trickyPhones = sys.argv[2]
+    # Prefix for leaf nodes
+    leafPrefix = sys.argv[3]
+    # State(s) for which to draw diagram
+    states = map(int, sys.argv[4].split())
+    #Image path
+    outputGraphicPrefix = sys.argv[5]
+    
+    print "[INF FILE] = ",  inputFile
+    print "[TRICKYPHONES] = ",  trickyPhones
+    print "[LEAF PREFIX] = ",  leafPrefix
+    print "[STATES] = ",  states
+    print "[OUTPUT IMAGE PREFIX] = ",  outputGraphicPrefix
 
-# Load hts question file (.inf)
-inputFile = sys.argv[1]
-#Tricky phones
-trickyPhones = sys.argv[2]
-# Prefix for leaf nodes
-leafPrefix = sys.argv[3]
-# State(s) for which to draw diagram
-states = map(int, sys.argv[4].split())
-#Image path
-outputGraphicPrefix = sys.argv[5]
 
-tree = QSTreeDiagram(inputFile,trickyPhones,leafPrefix,  states)
+tree = QSTreeDiagram(inputFile,trickyPhones,leafPrefix,  state=states)
 
 for i in states:
-    outputFilename = outputGraphicPrefix + "_" + str(i) + ".png"
-    tree.DrawTree(i, outputFilename)
+    format = 'svg'
+    outputFilename = outputGraphicPrefix + "_" + str(i) + "." + format
+    tree.DrawTree(i, outputFilename,  format)

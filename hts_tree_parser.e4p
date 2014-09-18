@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project hts_tree_parser -->
-<!-- Saved: 2014-09-17, 13:53:17 -->
+<!-- Saved: 2014-09-19, 00:19:23 -->
 <!-- Copyright (C) 2014 Sahil Jain, sjai013.ece@gmail.com -->
 <Project version="4.6">
   <Language>en</Language>
@@ -12,11 +12,12 @@
   <Author>Sahil Jain</Author>
   <Email>sjai013.ece@gmail.com</Email>
   <Sources>
-    <Source>tree_parse.py</Source>
     <Source>__init__.py</Source>
-    <Source>tree_draw.py</Source>
     <Source>README.md</Source>
-    <Source>main.py</Source>
+    <Source>draw_tree.py</Source>
+    <Source>get_params.py</Source>
+    <Source>HMMFeatureParameters.py</Source>
+    <Source>QSTreeDiagram.py</Source>
   </Sources>
   <Forms>
   </Forms>
