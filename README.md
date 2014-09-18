@@ -1,7 +1,7 @@
 hts_tree_parser
 ===============
 
-Parse HTS question files and generate tree diagrams.  Refer to main.py for basic instructions
+Parse HTS question files and generate tree diagrams and pdf output references based on targetfeatures.  Refer to draw_tree.py and get_params.py for basic instructions
 
 draw_tree.py
 ============
